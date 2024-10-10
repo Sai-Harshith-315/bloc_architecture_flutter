@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/Auth/login_screen.dart';
-import 'package:grocery_app/Auth/signup_screen.dart';
-import 'package:grocery_app/constants/colors.dart';
-import 'package:grocery_app/widgets/my_text_wiget.dart';
+import '../constants/colors.dart';
+import '../widgets/my_text_wiget.dart';
+import 'login_screen.dart';
+import 'signup_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
