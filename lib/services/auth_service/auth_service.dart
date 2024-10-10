@@ -1,7 +1,7 @@
 // services/auth_service.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import '../../data/firebase_data.dart';
+import '../../data/auth_data/firebase_data.dart';
 import '../../presentation/constants/colors.dart';
 import '../models/user_model.dart';
 

@@ -1,4 +1,4 @@
-import 'package:bloc_architecture_flutter/services/service/auth_service.dart';
+import 'package:bloc_architecture_flutter/services/auth_service/auth_service.dart';
 import 'package:get/get.dart';
 
 class SignInController extends GetxController {
