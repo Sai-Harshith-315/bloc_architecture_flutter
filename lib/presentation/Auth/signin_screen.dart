@@ -1,20 +1,25 @@
 import 'package:bloc_architecture_flutter/presentation/Auth/forgot_password.dart';
 import 'package:bloc_architecture_flutter/presentation/screens/home_screen.dart';
+import 'package:bloc_architecture_flutter/presentation/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../constants/colors.dart';
 import '../constants/responsive.dart';
+import '../controllers/sign_in_controller.dart';
 import '../widgets/my_textFormField.dart';
 import '../widgets/my_text_wiget.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignInScreenState extends State<SignInScreen> {
+  TextEditingController userEmailController = TextEditingController();
+  TextEditingController userPasswordController = TextEditingController();
+//init the controller
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,7 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         : Responsive.isMobileLarge(context)
                             ? MediaQuery.of(context).size.width * .7
                             : MediaQuery.of(context).size.width * .9,
-                // maxHeight: MediaQuery.of(context).size.height * .5,
               ),
               child: Padding(
                 padding:
@@ -56,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 30,
                     ),
                     CustomTextFormField(
+                      controller: userEmailController,
                       hintText: 'Eamil Address',
                       labelText: 'Eamil Address',
                     ),
@@ -63,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 30,
                     ),
                     CustomTextFormField(
+                      controller: userPasswordController,
                       hintText: 'Password',
                       labelText: 'Password',
                     ),
@@ -91,20 +97,38 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        // Get.toNamed(AppRoutes.homeScreen);
-                        Get.to(() => const HomeScreen());
+                        final SignInController signInController =
+                            Get.put(SignInController());
+                        String email = userEmailController.text.trim();
+                        String password = userPasswordController.text.trim();
+                        try {
+                          if (email != '' && password != '') {
+                            signInController.loginUser(email, password);
+                            Get.to(() => const MainScreen());
+                            Get.snackbar(
+                              '$email',
+                              'welcome to VAVFoods HomeScreen',
+                              backgroundColor: Colors.green,
+                              colorText: white,
+                            );
+                          }
+                        } catch (e) {
+                          print("Error in the SignIn Screen $e");
+
+                          Get.snackbar(
+                            'Error',
+                            "Error in Sign In Screen",
+                            colorText: white,
+                            backgroundColor: red,
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: /* Responsive.isDesktop(context) ||
-                                    Responsive.isDesktopLarge(context)
-                                ? 30
-                                : */
-                                50,
-                            vertical: 20),
+                            horizontal: 50, vertical: 20),
                         backgroundColor: greencolor,
                       ),
                       child: MyText(

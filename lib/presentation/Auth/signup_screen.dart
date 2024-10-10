@@ -1,5 +1,7 @@
+import 'package:bloc_architecture_flutter/presentation/screens/main_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import '../controllers/sign_up_controller.dart';
 import '../constants/colors.dart';
 import '../constants/responsive.dart';
 import '../widgets/my_textFormField.dart';
@@ -13,6 +15,13 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final SignUpController signUpController = Get.put(SignUpController());
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController userEmailController = TextEditingController();
+  TextEditingController userPhoneController = TextEditingController();
+  TextEditingController userPasswordController = TextEditingController();
+  TextEditingController userConfirmPasswordController = TextEditingController();
+  TextEditingController userAddressController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,7 +39,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         : Responsive.isMobileLarge(context)
                             ? MediaQuery.of(context).size.width * .7
                             : MediaQuery.of(context).size.width * .9,
-                // maxHeight: MediaQuery.of(context).size.height * .5,
               ),
               child: Padding(
                 padding:
@@ -72,6 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 30,
                     ),
                     CustomTextFormField(
+                      controller: userNameController,
                       hintText: 'Name',
                       labelText: 'Name',
                     ),
@@ -79,6 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 20,
                     ),
                     CustomTextFormField(
+                      controller: userEmailController,
                       hintText: 'Eamil Address',
                       labelText: 'Eamil Address',
                     ),
@@ -86,6 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 20,
                     ),
                     CustomTextFormField(
+                      controller: userPasswordController,
                       hintText: 'Password',
                       labelText: 'Password',
                     ),
@@ -93,6 +104,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 20,
                     ),
                     CustomTextFormField(
+                      controller: userConfirmPasswordController,
                       hintText: 'Confirm Password',
                       labelText: 'Confirm Password',
                     ),
@@ -100,7 +112,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 30,
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        try {
+                          if (userNameController.text != '' &&
+                              userEmailController.text != '' &&
+                              userPhoneController != '' &&
+                              userAddressController != '' &&
+                              userPasswordController != '') {
+                            signUpController.signUpUser(
+                              userNameController.text.trim(),
+                              userEmailController.text.trim(),
+                              userPhoneController.text.trim(),
+                              userAddressController.text.trim(),
+                              userPasswordController.text.trim(),
+                            );
+                            Get.snackbar(
+                              backgroundColor: green,
+                              'Successfully Login',
+                              '${userNameController.text} - welcome to VAVFOODS',
+                              colorText: white,
+                            );
+                            Get.to(() => MainScreen());
+                          }
+                        } catch (e) {
+                          print('Error in the signup screen $e');
+                          Get.snackbar(
+                            backgroundColor: red,
+                            'Error',
+                            'Error in the signup screen $e',
+                            colorText: white,
+                          );
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 20),
