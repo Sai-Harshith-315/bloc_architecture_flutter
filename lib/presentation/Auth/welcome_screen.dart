@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../widgets/my_text_wiget.dart';
-import 'login_screen.dart';
+import 'signin_screen.dart';
 import 'signup_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -73,7 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               const Expanded(
                 child: TabBarView(
                   children: [
-                    LoginScreen(),
+                    SignInScreen(),
                     SignUpScreen(),
                   ],
                 ),

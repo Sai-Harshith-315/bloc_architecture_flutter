@@ -1,3 +1,4 @@
+import 'package:bloc_architecture_flutter/presentation/widgets/my_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,6 +11,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: MyAppBar(title: 'HomeScreen'),
+    );
   }
 }
