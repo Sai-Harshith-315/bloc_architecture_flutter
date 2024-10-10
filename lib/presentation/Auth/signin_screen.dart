@@ -59,45 +59,50 @@ class _SignInScreenState extends State<SignInScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    CustomTextFormField(
-                      controller: userEmailController,
-                      hintText: 'Email',
-                      labelText: 'Enter Mail',
-                      errorText: signInController.emailError.value.isNotEmpty
-                          ? signInController.emailError.value
-                          : null,
-                      onChanged: (value) {
-                        signInController.email.value = value;
-                        signInController.validateEmail;
-                      },
+                    Obx(
+                      () => CustomTextFormField(
+                        controller: userEmailController,
+                        hintText: 'Email',
+                        labelText: 'Enter Mail',
+                        errorText: signInController.emailError.value.isNotEmpty
+                            ? signInController.emailError.value
+                            : null,
+                        onChanged: (value) {
+                          signInController.email.value = value;
+                          signInController.validateEmail;
+                        },
+                      ),
                     ),
                     const SizedBox(
                       height: 30,
                     ),
-                    CustomTextFormField(
-                      obscureText: !signInController.isPasswordVisible.value,
-                      controller: userPasswordController,
-                      hintText: 'Password',
-                      labelText: 'Password',
-                      errorText: signInController.passwordError.value.isNotEmpty
-                          ? signInController.passwordError.value
-                          : null,
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          signInController.isPasswordVisible.value
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                    Obx(
+                      () => CustomTextFormField(
+                        obscureText: !signInController.isPasswordVisible.value,
+                        controller: userPasswordController,
+                        hintText: 'Password',
+                        labelText: 'Password',
+                        errorText:
+                            signInController.passwordError.value.isNotEmpty
+                                ? signInController.passwordError.value
+                                : null,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            signInController.isPasswordVisible.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            signInController.togglePasswordVisibility();
+                          },
                         ),
-                        onPressed: () {
-                          signInController.togglePasswordVisibility();
+                        onChanged: (value) {
+                          signInController.password.value =
+                              value; // Update the password observable
+                          signInController
+                              .validatePassword(value); // Validate the password
                         },
                       ),
-                      onChanged: (value) {
-                        signInController.password.value =
-                            value; // Update the password observable
-                        signInController
-                            .validatePassword(value); // Validate the password
-                      },
                     ),
                     const SizedBox(
                       height: 30,
