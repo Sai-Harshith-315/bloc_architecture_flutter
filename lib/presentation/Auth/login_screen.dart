@@ -1,4 +1,7 @@
+import 'package:bloc_architecture_flutter/presentation/Auth/forgot_password.dart';
+import 'package:bloc_architecture_flutter/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../constants/colors.dart';
 import '../constants/responsive.dart';
 import '../widgets/my_textFormField.dart';
@@ -66,15 +69,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: MyText(
-                          text: 'Forgot Password ?',
-                          color: greencolor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => const ForgotPassword());
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: MyText(
+                            text: 'Forgot Password ?',
+                            color: greencolor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
@@ -84,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ElevatedButton(
                       onPressed: () {
                         // Get.toNamed(AppRoutes.homeScreen);
+                        Get.to(() => const HomeScreen());
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
