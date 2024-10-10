@@ -1,4 +1,4 @@
-import 'package:bloc_architecture_flutter/presentation/Auth/signin_screen.dart';
+import 'package:bloc_architecture_flutter/presentation/Auth/welcome_screen.dart';
 import 'package:bloc_architecture_flutter/presentation/controllers/forgot_password_controller.dart';
 import 'package:bloc_architecture_flutter/presentation/widgets/my_app_bar.dart';
 import 'package:bloc_architecture_flutter/presentation/widgets/my_textFormField.dart';
@@ -37,7 +37,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               if (userEmail != '') {
                 forgotPasswordController.forgotPassword(userEmail);
                 userEmailController.clear();
-                Get.to(() => SignInScreen());
+                Get.to(() => WelcomeScreen());
               } else {
                 Get.snackbar('Error', 'Please Enter Your Email');
               }
