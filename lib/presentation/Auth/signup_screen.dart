@@ -79,67 +79,176 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    CustomTextFormField(
-                      controller: userNameController,
-                      hintText: 'Name',
-                      labelText: 'Name',
+                    //name
+                    Obx(
+                      () => CustomTextFormField(
+                        controller: userNameController,
+                        hintText: 'Name',
+                        labelText: 'Name',
+                        errorText: signUpController.nameError.value.isNotEmpty
+                            ? signUpController.nameError.value
+                            : null,
+                        onChanged: (value) {
+                          signUpController.name.value = value;
+                          signUpController.validateName;
+                        },
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    CustomTextFormField(
-                      controller: userEmailController,
-                      hintText: 'Eamil Address',
-                      labelText: 'Eamil Address',
+                    //email
+                    Obx(
+                      () => CustomTextFormField(
+                        controller: userEmailController,
+                        hintText: 'Eamil Address',
+                        labelText: 'Eamil Address',
+                        errorText: signUpController.emailError.value.isNotEmpty
+                            ? signUpController.emailError.value
+                            : null,
+                        onChanged: (value) {
+                          signUpController.email.value = value;
+                          signUpController.validateEmail;
+                        },
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    CustomTextFormField(
-                      controller: userPasswordController,
-                      hintText: 'Password',
-                      labelText: 'Password',
+                    //phone number
+                    Obx(
+                      () => CustomTextFormField(
+                        maxLength: 10,
+                        controller: userPhoneController,
+                        hintText: 'phone',
+                        labelText: 'Phone Number',
+                        errorText: signUpController.phoneError.value.isNotEmpty
+                            ? signUpController.phoneError.value
+                            : null,
+                        onChanged: (value) {
+                          signUpController.phone.value = value;
+                          signUpController.validatePhone;
+                        },
+                        keyboardType: TextInputType.phone,
+                      ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    CustomTextFormField(
-                      controller: userConfirmPasswordController,
-                      hintText: 'Confirm Password',
-                      labelText: 'Confirm Password',
+
+                    //password
+                    Obx(
+                      () => CustomTextFormField(
+                        obscureText: !signUpController.isPasswordVisible.value,
+                        controller: userPasswordController,
+                        hintText: 'Password',
+                        labelText: 'Password',
+                        errorText:
+                            signUpController.passwordError.value.isNotEmpty
+                                ? signUpController.passwordError.value
+                                : null,
+                        suffixIcon: IconButton(
+                          icon: Icon(signUpController.isPasswordVisible.value
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: () {
+                            signUpController.togglePasswordVisibility();
+                          },
+                        ),
+                        onChanged: (value) {
+                          signUpController.password.value =
+                              value; // Update the password observable
+                          signUpController
+                              .validatePassword(value); // Validate the password
+                        },
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    //confirm password
+                    Obx(
+                      () => CustomTextFormField(
+                        obscureText:
+                            !signUpController.isConfirmPasswordVisible.value,
+                        controller: userConfirmPasswordController,
+                        hintText: 'Confirm Password',
+                        labelText: 'Confirm Password',
+                        errorText: signUpController
+                                .confirmPasswordError.value.isNotEmpty
+                            ? signUpController.confirmPasswordError.value
+                            : null,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                              signUpController.isConfirmPasswordVisible.value
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                          onPressed: () {
+                            signUpController.toggleConfirmPasswordVisibility();
+                          },
+                        ),
+                        onChanged: (value) {
+                          signUpController.confirmPassword.value =
+                              value; // Update confirm password
+                          signUpController.validateConfirmPassword(
+                              value); // Validate confirm password
+                        },
+                      ),
                     ),
                     const SizedBox(
                       height: 30,
                     ),
+                    //signup button
                     ElevatedButton(
                       onPressed: () {
                         try {
-                          if (userNameController.text != '' &&
-                              userEmailController.text != '' &&
-                              userPhoneController != '' &&
-                              userAddressController != '' &&
-                              userPasswordController != '') {
+                          signUpController
+                              .validateName(signUpController.name.value);
+                          signUpController
+                              .validateEmail(signUpController.email.value);
+                          signUpController
+                              .validatePhone(signUpController.phone.value);
+                          signUpController.validatePassword(
+                              signUpController.password.value);
+                          signUpController.validateConfirmPassword(
+                              signUpController.confirmPassword.value);
+
+                          if (signUpController.nameError.value.isEmpty &&
+                              signUpController.emailError.value.isEmpty &&
+                              signUpController.phoneError.value.isEmpty &&
+                              signUpController.passwordError.value.isEmpty &&
+                              signUpController
+                                  .confirmPasswordError.value.isEmpty) {
                             signUpController.signUpUser(
-                              userNameController.text.trim(),
-                              userEmailController.text.trim(),
-                              userPhoneController.text.trim(),
+                              signUpController.name.value.trim(),
+                              signUpController.email.value.trim(),
+                              signUpController.phone.value.trim(),
                               userAddressController.text.trim(),
-                              userPasswordController.text.trim(),
+                              signUpController.password.value.trim(),
                             );
+
+                            userNameController.clear();
+                            userEmailController.clear();
+                            userPhoneController.clear();
+                            userAddressController.clear();
+                            userPasswordController.clear();
+                            userConfirmPasswordController.clear();
+
                             Get.snackbar(
+                              'Successfully Registered',
+                              '${signUpController.name.value} - Welcome to VAVFOODS!',
                               backgroundColor: green,
-                              'Successfully Login',
-                              '${userNameController.text} - welcome to VAVFOODS',
                               colorText: white,
                             );
-                            Get.to(() => MainScreen());
+
+                            Get.to(() => const MainScreen());
                           }
                         } catch (e) {
                           print('Error in the signup screen $e');
                           Get.snackbar(
-                            backgroundColor: red,
                             'Error',
-                            'Error in the signup screen $e',
+                            'Error in the signup screen: $e',
+                            backgroundColor: red,
                             colorText: white,
                           );
                         }

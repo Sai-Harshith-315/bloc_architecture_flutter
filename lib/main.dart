@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'presentation/Auth/welcome_screen.dart';
 
 Future<void> main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

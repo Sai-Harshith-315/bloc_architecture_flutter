@@ -34,10 +34,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             onPressed: () {
               final String userEmail = userEmailController.text.trim();
 
-              if (userEmail != '') {
+              if (userEmail.isNotEmpty) {
                 forgotPasswordController.forgotPassword(userEmail);
                 userEmailController.clear();
                 Get.to(() => WelcomeScreen());
+                Get.snackbar('Notifaction sent', '$userEmail');
               } else {
                 Get.snackbar('Error', 'Please Enter Your Email');
               }

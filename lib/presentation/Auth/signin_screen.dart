@@ -1,5 +1,4 @@
 import 'package:bloc_architecture_flutter/presentation/Auth/forgot_password.dart';
-import 'package:bloc_architecture_flutter/presentation/screens/home_screen.dart';
 import 'package:bloc_architecture_flutter/presentation/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -96,19 +95,38 @@ class _SignInScreenState extends State<SignInScreen> {
                       height: 30,
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         final SignInController signInController =
                             Get.put(SignInController());
                         String email = userEmailController.text.trim();
                         String password = userPasswordController.text.trim();
                         try {
-                          if (email != '' && password != '') {
-                            signInController.loginUser(email, password);
-                            Get.to(() => const MainScreen());
+                          if (email.isNotEmpty && password.isNotEmpty) {
+                            bool loginSuccess = await signInController
+                                .loginUser(email, password);
+                            if (loginSuccess) {
+                              // If login is successful, navigate to the main screen
+                              Get.to(() => const MainScreen());
+                              Get.snackbar(
+                                '$email Login Successful',
+                                'Welcome to VAVFoods HomeScreen',
+                                backgroundColor: green,
+                                colorText: white,
+                              );
+                            } else {
+                              // UserCredential is null, login failed
+                              Get.snackbar(
+                                'Login Failed',
+                                'Please check your email and password.',
+                                backgroundColor: red,
+                                colorText: white,
+                              );
+                            }
+                          } else {
                             Get.snackbar(
-                              '$email',
-                              'welcome to VAVFoods HomeScreen',
-                              backgroundColor: Colors.green,
+                              'Error',
+                              'Email and password cannot be empty',
+                              backgroundColor: red,
                               colorText: white,
                             );
                           }

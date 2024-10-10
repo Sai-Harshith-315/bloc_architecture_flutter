@@ -20,6 +20,9 @@ class CustomTextFormField extends StatelessWidget {
   Widget? label;
   EdgeInsetsGeometry? contentPadding;
   TextInputAction? textInputAction;
+  String? errorText;
+  void Function(String)? onChanged;
+  int? maxLength;
 
   CustomTextFormField({
     super.key,
@@ -39,6 +42,9 @@ class CustomTextFormField extends StatelessWidget {
     this.label,
     this.contentPadding,
     this.textInputAction,
+    this.errorText,
+    this.onChanged,
+    this.maxLength,
   });
 
   @override
@@ -46,9 +52,11 @@ class CustomTextFormField extends StatelessWidget {
     return SizedBox(
       height: height,
       child: TextFormField(
+        onChanged: onChanged,
         controller: controller,
         obscureText: obscureText,
         validator: validator,
+        maxLength: maxLength,
         onSaved: onSaved,
         maxLines: maxLines ?? 1,
         textInputAction: textInputAction,
@@ -62,6 +70,7 @@ class CustomTextFormField extends StatelessWidget {
           prefixIcon: prefixIcon,
           contentPadding: contentPadding,
           hintText: hintText,
+          errorText: errorText,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: const BorderSide(color: grey),

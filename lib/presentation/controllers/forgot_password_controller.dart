@@ -6,6 +6,7 @@ import '../../services/auth_service/auth_service.dart';
 class ForgotPasswordController extends GetxController {
   //for password visibility
   final isPasswordVisible = false.obs;
+
   final AuthService firebaseAuth = AuthService();
 
   Future<void> forgotPassword(String userEmail) async {
