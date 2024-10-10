@@ -1,29 +1,9 @@
-/* import 'package:bloc_architecture_flutter/services/auth_service/auth_service.dart';
-import 'package:get/get.dart';
-
-class SignInController extends GetxController {
-  final AuthService authService = AuthService();
-
-  //for password visibility
-  final isPasswordVisible = false.obs;
-
-  Future<void> loginUser(String userEmail, String userPassword) async {
-    await authService.signInServices(
-      userEmail,
-      userPassword,
-    );
-  }
-}
- */
 import 'package:bloc_architecture_flutter/services/auth_service/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 class SignInController extends GetxController {
   final AuthService authService = AuthService();
-
-  // For password visibility
-  final isPasswordVisible = false.obs;
 
   Future<bool> loginUser(String userEmail, String userPassword) async {
     // Attempt to log in the user
@@ -37,6 +17,37 @@ class SignInController extends GetxController {
       return true; // Login was successful
     } else {
       return false; // Login failed
+    }
+  }
+
+  // Observables for form fields
+  var email = ''.obs;
+  var password = ''.obs;
+  // Error messages for validation
+  var emailError = ''.obs;
+  var passwordError = ''.obs;
+  // For password visibility
+  final isPasswordVisible = false.obs;
+
+  // Validation logic for email
+  void validateEmail(String value) {
+    if (value.isEmpty) {
+      emailError.value = 'Email cannot be empty';
+    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+      emailError.value = 'Please enter a valid email';
+    } else {
+      emailError.value = '';
+    }
+  }
+
+  // Validation logic for password
+  void validatePassword(String value) {
+    if (value.isEmpty) {
+      passwordError.value = 'Password cannot be empty';
+    } else if (value.length < 6) {
+      passwordError.value = 'Password must be at least 6 characters long';
+    } else {
+      passwordError.value = '';
     }
   }
 

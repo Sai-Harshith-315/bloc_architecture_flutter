@@ -16,6 +16,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  SignInController signInController = Get.put(SignInController());
   TextEditingController userEmailController = TextEditingController();
   TextEditingController userPasswordController = TextEditingController();
 //init the controller
@@ -24,8 +25,8 @@ class _SignInScreenState extends State<SignInScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: white,
-        body: SingleChildScrollView(
-          child: Center(
+        body: Center(
+          child: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: Responsive.isDesktop(context) ||
@@ -60,16 +61,43 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     CustomTextFormField(
                       controller: userEmailController,
-                      hintText: 'Eamil Address',
-                      labelText: 'Eamil Address',
+                      hintText: 'Email',
+                      labelText: 'Enter Mail',
+                      errorText: signInController.emailError.value.isNotEmpty
+                          ? signInController.emailError.value
+                          : null,
+                      onChanged: (value) {
+                        signInController.email.value = value;
+                        signInController.validateEmail;
+                      },
                     ),
                     const SizedBox(
                       height: 30,
                     ),
                     CustomTextFormField(
+                      obscureText: !signInController.isPasswordVisible.value,
                       controller: userPasswordController,
                       hintText: 'Password',
                       labelText: 'Password',
+                      errorText: signInController.passwordError.value.isNotEmpty
+                          ? signInController.passwordError.value
+                          : null,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          signInController.isPasswordVisible.value
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          signInController.togglePasswordVisibility();
+                        },
+                      ),
+                      onChanged: (value) {
+                        signInController.password.value =
+                            value; // Update the password observable
+                        signInController
+                            .validatePassword(value); // Validate the password
+                      },
                     ),
                     const SizedBox(
                       height: 30,
@@ -96,25 +124,34 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        final SignInController signInController =
-                            Get.put(SignInController());
-                        String email = userEmailController.text.trim();
-                        String password = userPasswordController.text.trim();
                         try {
-                          if (email.isNotEmpty && password.isNotEmpty) {
-                            bool loginSuccess = await signInController
-                                .loginUser(email, password);
+                          // Check if the fields have any errors already
+                          if (signInController.emailError.value.isEmpty &&
+                              signInController.passwordError.value.isEmpty &&
+                              signInController.email.value.isNotEmpty &&
+                              signInController.password.value.isNotEmpty) {
+                            // Attempt login using the observables directly
+                            bool loginSuccess =
+                                await signInController.loginUser(
+                              signInController.email.value.trim(),
+                              signInController.password.value.trim(),
+                            );
+
                             if (loginSuccess) {
                               // If login is successful, navigate to the main screen
-                              Get.to(() => const MainScreen());
+                              // Get.to(() => const MainScreen());
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MainScreen()));
                               Get.snackbar(
-                                '$email Login Successful',
+                                '${userEmailController.text} Login Successful',
                                 'Welcome to VAVFoods HomeScreen',
                                 backgroundColor: green,
                                 colorText: white,
                               );
                             } else {
-                              // UserCredential is null, login failed
+                              // Login failed
                               Get.snackbar(
                                 'Login Failed',
                                 'Please check your email and password.',
@@ -123,19 +160,19 @@ class _SignInScreenState extends State<SignInScreen> {
                               );
                             }
                           } else {
+                            // Show validation errors if fields are empty or errors are present
                             Get.snackbar(
                               'Error',
-                              'Email and password cannot be empty',
+                              'Please check it the entered fields are not correct.',
                               backgroundColor: red,
                               colorText: white,
                             );
                           }
                         } catch (e) {
                           print("Error in the SignIn Screen $e");
-
                           Get.snackbar(
                             'Error',
-                            "Error in Sign In Screen",
+                            'Error in Sign In Screen: $e',
                             colorText: white,
                             backgroundColor: red,
                           );

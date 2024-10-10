@@ -64,7 +64,7 @@ class CustomTextFormField extends StatelessWidget {
         keyboardType: keyboardType,
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: TextStyle(color: black),
+          labelStyle: TextStyle(color: greencolor),
           suffixIcon: suffixIcon,
           label: label,
           prefixIcon: prefixIcon,

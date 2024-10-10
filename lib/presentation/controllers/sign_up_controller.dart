@@ -1,6 +1,5 @@
 // presentation/controllers/sign_up_controller.dart
 import 'package:get/get.dart';
-
 import '../../services/auth_service/auth_service.dart';
 
 class SignUpController extends GetxController {

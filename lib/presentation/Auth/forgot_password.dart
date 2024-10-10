@@ -1,10 +1,13 @@
 import 'package:bloc_architecture_flutter/presentation/Auth/welcome_screen.dart';
+import 'package:bloc_architecture_flutter/presentation/constants/colors.dart';
 import 'package:bloc_architecture_flutter/presentation/controllers/forgot_password_controller.dart';
 import 'package:bloc_architecture_flutter/presentation/widgets/my_app_bar.dart';
 import 'package:bloc_architecture_flutter/presentation/widgets/my_textFormField.dart';
 import 'package:bloc_architecture_flutter/presentation/widgets/my_text_wiget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../constants/responsive.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -22,30 +25,67 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(title: 'Forgot Password'),
-      body: Column(
-        children: [
-          MyText(text: 'Enter Your Mail For Reset your passsword'),
-          CustomTextFormField(
-            controller: userEmailController,
-            hintText: 'Enter Eamil',
-            labelText: 'Email',
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final String userEmail = userEmailController.text.trim();
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: Responsive.isDesktop(context) ||
+                        Responsive.isDesktopLarge(context)
+                    ? MediaQuery.of(context).size.width * .32
+                    : Responsive.isTablet(context)
+                        ? MediaQuery.of(context).size.width * .5
+                        : Responsive.isMobileLarge(context)
+                            ? MediaQuery.of(context).size.width * .7
+                            : MediaQuery.of(context).size.width * .9,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  MyText(text: 'Enter Your Mail For Reset your passsword'),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CustomTextFormField(
+                    controller: userEmailController,
+                    hintText: 'Enter Eamil',
+                    labelText: 'Email',
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 20),
+                      backgroundColor: greencolor,
+                    ),
+                    onPressed: () {
+                      final String userEmail = userEmailController.text.trim();
 
-              if (userEmail.isNotEmpty) {
-                forgotPasswordController.forgotPassword(userEmail);
-                userEmailController.clear();
-                Get.to(() => WelcomeScreen());
-                Get.snackbar('Notifaction sent', '$userEmail');
-              } else {
-                Get.snackbar('Error', 'Please Enter Your Email');
-              }
-            },
-            child: MyText(text: 'Send'),
+                      if (userEmail.isNotEmpty) {
+                        forgotPasswordController.forgotPassword(userEmail);
+                        userEmailController.clear();
+                        Get.to(() => WelcomeScreen());
+                        Get.snackbar('Notifaction sent', '$userEmail');
+                      } else {
+                        Get.snackbar('Error', 'Please Enter Your Email');
+                      }
+                    },
+                    child: MyText(
+                      text: 'Send',
+                      color: white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

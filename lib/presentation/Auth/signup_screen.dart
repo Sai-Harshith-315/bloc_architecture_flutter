@@ -27,8 +27,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: white,
-        body: SingleChildScrollView(
-          child: Center(
+        body: Center(
+          child: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: Responsive.isDesktop(context) ||
@@ -254,6 +254,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 20),
                         backgroundColor: greencolor,
